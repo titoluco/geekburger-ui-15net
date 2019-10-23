@@ -12,3 +12,16 @@ C:\Users\marcos.alberto\Downloads\Nova pasta (2)\geekburger_ui\geekburger_ui\obj
 C:\Users\marcos.alberto\Downloads\Nova pasta (2)\geekburger_ui\geekburger_ui\obj\Debug\netcoreapp2.1\geekburger_ui.RazorTargetAssemblyInfo.cache
 C:\Users\marcos.alberto\Downloads\Nova pasta (2)\geekburger_ui\geekburger_ui\obj\Debug\netcoreapp2.1\geekburger_ui.dll
 C:\Users\marcos.alberto\Downloads\Nova pasta (2)\geekburger_ui\geekburger_ui\obj\Debug\netcoreapp2.1\geekburger_ui.pdb
+C:\Users\logonrmlocal\Downloads\New folder\geekburger-ui-15net\geekburger_ui\bin\Debug\netcoreapp2.1\geekburger_ui.deps.json
+C:\Users\logonrmlocal\Downloads\New folder\geekburger-ui-15net\geekburger_ui\bin\Debug\netcoreapp2.1\geekburger_ui.runtimeconfig.json
+C:\Users\logonrmlocal\Downloads\New folder\geekburger-ui-15net\geekburger_ui\bin\Debug\netcoreapp2.1\geekburger_ui.runtimeconfig.dev.json
+C:\Users\logonrmlocal\Downloads\New folder\geekburger-ui-15net\geekburger_ui\bin\Debug\netcoreapp2.1\geekburger_ui.dll
+C:\Users\logonrmlocal\Downloads\New folder\geekburger-ui-15net\geekburger_ui\bin\Debug\netcoreapp2.1\geekburger_ui.pdb
+C:\Users\logonrmlocal\Downloads\New folder\geekburger-ui-15net\geekburger_ui\obj\Debug\netcoreapp2.1\geekburger_ui.csproj.CoreCompileInputs.cache
+C:\Users\logonrmlocal\Downloads\New folder\geekburger-ui-15net\geekburger_ui\obj\Debug\netcoreapp2.1\geekburger_ui.RazorAssemblyInfo.cache
+C:\Users\logonrmlocal\Downloads\New folder\geekburger-ui-15net\geekburger_ui\obj\Debug\netcoreapp2.1\geekburger_ui.RazorAssemblyInfo.cs
+C:\Users\logonrmlocal\Downloads\New folder\geekburger-ui-15net\geekburger_ui\obj\Debug\netcoreapp2.1\geekburger_ui.AssemblyInfoInputs.cache
+C:\Users\logonrmlocal\Downloads\New folder\geekburger-ui-15net\geekburger_ui\obj\Debug\netcoreapp2.1\geekburger_ui.AssemblyInfo.cs
+C:\Users\logonrmlocal\Downloads\New folder\geekburger-ui-15net\geekburger_ui\obj\Debug\netcoreapp2.1\geekburger_ui.RazorTargetAssemblyInfo.cache
+C:\Users\logonrmlocal\Downloads\New folder\geekburger-ui-15net\geekburger_ui\obj\Debug\netcoreapp2.1\geekburger_ui.dll
+C:\Users\logonrmlocal\Downloads\New folder\geekburger-ui-15net\geekburger_ui\obj\Debug\netcoreapp2.1\geekburger_ui.pdb

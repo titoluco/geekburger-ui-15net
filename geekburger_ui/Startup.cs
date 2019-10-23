@@ -63,7 +63,12 @@ namespace geekburger_ui
             });
 
             app.UseHttpsRedirection();
-            app.UseMvc();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=swagger}");
+            });
         }
     }
 }

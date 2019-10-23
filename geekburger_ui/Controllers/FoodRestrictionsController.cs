@@ -10,31 +10,16 @@ namespace geekburger_ui.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FoodRestrictionsController : Controller
+    public class FoodRestrictionsController : ControllerBase
     {
-        // POST api/foodRestrictions
-        /// <summary>
-        /// Grava as restrições alimentares.
-        /// </summary>
-        /// <remarks>
-        /// Exemple:
-        /// 
-        ///     POST api/foodRestrictions
-        ///     {
-        ///        "Restrictions": ["soy","gluten"],
-        ///        "Others": "brocolis",
-        ///        "UserId": 1111,
-        ///        "RequesterId": 1111 
-        ///      }
-        ///
-        /// </remarks>
-        /// <param name="value"></param>
-        /// <returns>Uma nova restrição gravada</returns>
-        /// <response code="201">Retorna o novo item criado</response>
-        /// <response code="400">Se o item não for criado</response> 
-        [HttpPost]
-        public void Post([FromBody] FoodRestrictions value)
+        public FoodRestrictionsController()
         {
+        }
+
+        [HttpPost]
+        public void Post(FoodRestrictions foodRestrictions)
+        {
+            //return null; // CreatedAtAction("GetReceita", new { id = foodRestrictions }, foodRestrictions);
         }
     }
 }

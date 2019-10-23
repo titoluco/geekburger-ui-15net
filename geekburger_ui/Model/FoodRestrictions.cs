@@ -7,9 +7,9 @@ namespace geekburger_ui.Model
 {
     public class FoodRestrictions
     {
-        List<Restrictions> Restrictions { get; set; }
-        string Others { get; set; }
-        string UserId { get; set; }
-        int RequesterId { get; set; }
+        public string[] Restrictions { get; set; }
+        public string Others { get; set; }
+        public int UserId { get; set; }
+        public int RequesterId { get; set; }
     }
 }
