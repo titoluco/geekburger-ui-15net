@@ -25,3 +25,4 @@ C:\Users\logonrmlocal\Downloads\New folder\geekburger-ui-15net\geekburger_ui\obj
 C:\Users\logonrmlocal\Downloads\New folder\geekburger-ui-15net\geekburger_ui\obj\Debug\netcoreapp2.1\geekburger_ui.RazorTargetAssemblyInfo.cache
 C:\Users\logonrmlocal\Downloads\New folder\geekburger-ui-15net\geekburger_ui\obj\Debug\netcoreapp2.1\geekburger_ui.dll
 C:\Users\logonrmlocal\Downloads\New folder\geekburger-ui-15net\geekburger_ui\obj\Debug\netcoreapp2.1\geekburger_ui.pdb
+C:\Users\logonrmlocal\Downloads\New folder\geekburger-ui-15net\geekburger_ui\obj\Debug\netcoreapp2.1\geekburger_ui.csprojAssemblyReference.cache
