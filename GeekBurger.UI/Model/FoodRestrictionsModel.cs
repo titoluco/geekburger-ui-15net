@@ -9,7 +9,7 @@ namespace GeekBurger.UI.Model
     {
         public string[] Restrictions { get; set; }
         public string Others { get; set; }
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
         public int RequesterId { get; set; }
     }
 }
