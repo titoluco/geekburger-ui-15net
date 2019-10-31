@@ -4,9 +4,12 @@ using System.Text;
 
 namespace GeekBurger.UI.Contract
 {
-    public class FoodRestrictionsMessage
+    public class FoodRestrictionsResponse
     {
-        public Guid UserId { get; set; }
         public Guid RequesterId { get; set; }
     }
-}
+
+    public class FoodRestrictionMessage
+    {
+        public guid UserId { get; set; }
+    }

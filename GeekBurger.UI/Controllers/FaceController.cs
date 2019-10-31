@@ -29,10 +29,10 @@ namespace GeekBurger.UI.Controllers
         public IActionResult PostFace([FromBody] FaceToUpsert face)
         {
             //var faceToGet = new FaceToGet() { Processing = true, UserId = "2840b416-6bef-48fc-ac64-0db3df117955" }; //_mapper.Map<FaceToGet>(face);
+            var requestiD = Guid.NewGuid();
+            UserConnector.GetUserFromFace(requestiD);
 
-            return CreatedAtRoute("GetFace",
-                new { id = faceToGet.UserId },
-                faceToGet);
+            return Ok(new FoodRestrictionsResponse { RequesterId = requestiD });
         }
     }
 }
