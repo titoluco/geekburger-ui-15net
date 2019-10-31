@@ -14,7 +14,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using GeekBurger.UI.Helper;
 using Swashbuckle.AspNetCore.Swagger;
-using GeekBurger.UI.Repository;
 using GeekBurger.UI.Extension;
 using Microsoft.EntityFrameworkCore;
 //using Microsoft.AspNetCore.Hosting.Internal;
@@ -56,19 +55,10 @@ namespace GeekBurger.UI
             });
 
             services.AddAutoMapper();
-
-            var databasePath = "%DATABASEPATH%";
-            var connection = Configuration.GetConnectionString("sql")
-                .Replace(databasePath, HostingEnvironment.ContentRootPath);
-
-            services.AddEntityFrameworkSqlite()
-                .AddDbContext<UIContext>(o => o.UseSqlite(connection));
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, UIContext uiContext)
+        public void Configure(IApplicationBuilder app)
         {
 
             if (HostingEnvironment.IsDevelopment())
@@ -93,17 +83,6 @@ namespace GeekBurger.UI
             var option = new RewriteOptions();
             option.AddRedirect("^$", "swagger");
             app.UseRewriter(option);
-
-            using (var serviceScope = app
-                .ApplicationServices
-                .GetService<IServiceScopeFactory>()
-                .CreateScope())
-            {
-                var context = serviceScope.ServiceProvider.GetRequiredService<UIContext>();
-                context.Database.EnsureCreated();
-            }
-
-            uiContext.Seed();
 
         }
     }
