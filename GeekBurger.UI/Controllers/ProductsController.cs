@@ -17,8 +17,8 @@ namespace GeekBurger.UI.Controllers
         {
             productToGet = new ProductToGet()
             {
-                StoreId = new Guid(""),
-                ProductId = new Guid(""),
+                StoreId = new Guid(),
+                ProductId = new Guid(),
                 Name = "Nome",
                 Image = "Image",
                 Items = new List<ItemToGet>() { new ItemToGet() { ItemId = new Guid(""), Name = "Name" } },

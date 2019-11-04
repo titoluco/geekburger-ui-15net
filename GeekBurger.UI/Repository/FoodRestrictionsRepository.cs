@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace GeekBurger.UI.Repository
 {
-    public class FoodRestrictionsModelDB : IFoodRestrictionsDB
+    public class FoodRestrictionsRepository : IFoodRestrictionsRepository
     {
         private UIContext _dbContext;
         //private IProductChangedService _productChangedService;
 
-        public FoodRestrictionsModelDB(UIContext dbContext) //, IProductChangedService productChangedService)
+        public FoodRestrictionsRepository(UIContext dbContext) //, IProductChangedService productChangedService)
         {
             _dbContext = dbContext;
             //_productChangedService = productChangedService;

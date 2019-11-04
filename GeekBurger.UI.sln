@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeekBurger.UI", "GeekBurger
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeekBurger.UI.Contract", "GeekBurger.UI.Contract\GeekBurger.UI.Contract.csproj", "{307991F7-E93C-43D0-A02B-3B6F6BEB54B1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeekBurger.UI.Tests", "GeekBurger.UI.Tests\GeekBurger.UI.Tests.csproj", "{89A2DA52-74BD-4FDA-81D5-636C0A85F5D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeekBurger.UI.Mock", "GeekBurger.UI.Mock\GeekBurger.UI.Mock.csproj", "{AB4ACF72-0B19-4861-8C0A-452824C896D9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{307991F7-E93C-43D0-A02B-3B6F6BEB54B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{307991F7-E93C-43D0-A02B-3B6F6BEB54B1}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{307991F7-E93C-43D0-A02B-3B6F6BEB54B1}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{89A2DA52-74BD-4FDA-81D5-636C0A85F5D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89A2DA52-74BD-4FDA-81D5-636C0A85F5D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89A2DA52-74BD-4FDA-81D5-636C0A85F5D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89A2DA52-74BD-4FDA-81D5-636C0A85F5D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB4ACF72-0B19-4861-8C0A-452824C896D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB4ACF72-0B19-4861-8C0A-452824C896D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB4ACF72-0B19-4861-8C0A-452824C896D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB4ACF72-0B19-4861-8C0A-452824C896D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

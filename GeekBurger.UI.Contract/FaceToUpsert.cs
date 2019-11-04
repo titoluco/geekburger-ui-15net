@@ -6,7 +6,7 @@ namespace GeekBurger.UI.Contract
 {
     public class FaceToUpsert
     {
-        public string Face { get; set; }
+        public byte[] Face { get; set; }
         public Guid RequesterId { get; set; }
     }
 }

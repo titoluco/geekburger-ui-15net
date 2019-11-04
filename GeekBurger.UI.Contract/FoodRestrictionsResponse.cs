@@ -4,8 +4,8 @@ using System.Text;
 
 namespace GeekBurger.UI.Contract
 {
-    public class FoodRestrictionMessage
+    public class FoodRestrictionsResponse
     {
-        public Guid UserId { get; set; }
+        public Guid RequesterId { get; set; }
     }
 }
