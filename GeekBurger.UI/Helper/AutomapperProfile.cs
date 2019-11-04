@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using GeekBurger.UI.Contract;
 using GeekBurger.UI.Model;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +15,11 @@ namespace GeekBurger.UI.Helper
         {
             CreateMap<FaceToUpsert, FaceModel>();
             CreateMap<FaceModel, FaceToUpsert>();
-            CreateMap<FaceModel, FaceToUpsert>();
-            CreateMap<FaceToUpsert, FaceModel>();
+
+            CreateMap<EntityEntry<FaceModel>, FaceChangedMessage>()
+            .ForMember(dest => dest.Face, opt => opt.MapFrom(src => src.Entity));
+            CreateMap<EntityEntry<FaceModel>, FaceChangedEvent>()
+            .ForMember(dest => dest.Face, opt => opt.MapFrom(src => src.Entity));
         }
     }
 }

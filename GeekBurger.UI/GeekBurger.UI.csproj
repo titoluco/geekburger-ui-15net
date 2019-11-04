@@ -6,7 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Service\" />
+    <Compile Remove="Repository\FoodRestrictionsRepository.cs" />
+    <Compile Remove="Repository\IFoodRestrictionsRepository.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
@@ -15,6 +19,9 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.Azure.Management.ServiceBus" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Azure.Management.ServiceBus.Fluent" Version="1.27.2" />
+    <PackageReference Include="Microsoft.Azure.ServiceBus" Version="4.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.11">
       <PrivateAssets>all</PrivateAssets>
@@ -26,6 +33,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GeekBurger.UI.Contract\GeekBurger.UI.Contract.csproj" />
+    <ProjectReference Include="..\GeekBurger.UI.Mock\GeekBurger.UI.Mock.csproj" />
   </ItemGroup>
 
 </Project>

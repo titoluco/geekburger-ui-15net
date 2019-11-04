@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace GeekBurger.UI.Repository
 {
-    public interface IFoodRestrictionsDB
+    public interface IFoodRestrictionsRepository
     {
     }
 }

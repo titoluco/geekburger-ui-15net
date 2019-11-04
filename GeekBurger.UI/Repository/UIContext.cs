@@ -14,6 +14,7 @@ namespace GeekBurger.UI.Repository
         {
         }
         public DbSet<FaceModel> Face { get; set; }
-        public DbSet<FoodRestrictionsModel> FoodRestrictions { get; set; }
+        public DbSet<FaceChangedEvent> FaceChangedEvents { get; set; }
+        //public DbSet<FoodRestrictionsModel> FoodRestrictions { get; set; }
     }
 }

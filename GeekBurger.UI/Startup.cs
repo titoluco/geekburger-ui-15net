@@ -16,6 +16,9 @@ using GeekBurger.UI.Helper;
 using Swashbuckle.AspNetCore.Swagger;
 using GeekBurger.UI.Extension;
 using Microsoft.EntityFrameworkCore;
+using GeekBurger.UI.Service;
+//using GeekBurger.UI.Mock;
+using GeekBurger.UI.Repository;
 //using Microsoft.AspNetCore.Hosting.Internal;
 
 namespace GeekBurger.UI
@@ -30,7 +33,7 @@ namespace GeekBurger.UI
             Configuration = configuration;
             HostingEnvironment = env;
         }
-        
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -54,11 +57,31 @@ namespace GeekBurger.UI
                 });
             });
 
+            services.AddSingleton<IUserConnector, UserConnector>();
+            services.AddSingleton<IReceiveMessagesFactory, ReceiveMessagesFactory>();
             services.AddAutoMapper();
+            services.AddSignalR();
+
+            services.AddDbContext<UIContext>
+           (o => o.UseInMemoryDatabase("geekburger-ui"));
+
+
+
+            //var databasePath = "%DATABASEPATH%";
+            //var connection = Configuration.GetConnectionString("sql")
+            //    .Replace(databasePath, HostingEnvironment.ContentRootPath);
+
+            //services.AddEntityFrameworkSqlite()
+            //    .AddDbContext<UIContext>(o => o.UseSqlite(connection));
+
+            services.AddScoped<IFaceChangedEventRepository, FaceChangedEventRepository>();
+            services.AddScoped<IFaceRepository, FaceRepository>();
+            services.AddScoped<IFaceChangedService, FaceChangedService>();
+            services.AddScoped<ILogService, LogService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, UIContext uIContext)
         {
 
             if (HostingEnvironment.IsDevelopment())
@@ -83,6 +106,15 @@ namespace GeekBurger.UI
             var option = new RewriteOptions();
             option.AddRedirect("^$", "swagger");
             app.UseRewriter(option);
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<MessageHub>("/messagehub");
+            });
+
+            app.ApplicationServices.GetService<IReceiveMessagesFactory>();
+
+            //uIContext.Seed();
 
         }
     }
