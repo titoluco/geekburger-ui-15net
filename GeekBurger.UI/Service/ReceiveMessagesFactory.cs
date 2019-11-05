@@ -15,8 +15,8 @@ namespace GeekBurger.UI.Service
             _logger = logger;
 
             //By default, creates this receivemessageservice
-            CreateNew("storecatalogread", "html");
-            CreateNew("userretrieve", "html");
+            CreateNew("storecatalogready", "UI");
+            CreateNew("userretrieved", "UI");
             //CreateNew("orderpaid", "html", "filter-store", "8048e9ec-80fe-4bad-bc2a-e4f4a75c834e");
         }
 

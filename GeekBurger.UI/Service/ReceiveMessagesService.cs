@@ -81,9 +81,9 @@ namespace GeekBurger.UI.Service
             if (message.Label == "showproductslist")
                 products = JsonConvert.DeserializeObject<List<ProductToGetFormat>>(messageString);
             
-
-            _hubContext.Clients.All.SendAsync(_topicName, message.Label, products ?? (object)messageString);
             */
+            _hubContext.Clients.All.SendAsync("neworder", message.Label, new FaceModel() { RequesterId= new Guid()  } ?? (object)messageString);
+            
             return Task.CompletedTask;
         }
 

@@ -114,7 +114,7 @@ namespace GeekBurger.UI
 
             app.ApplicationServices.GetService<IReceiveMessagesFactory>();
 
-            //uIContext.Seed();
+            uIContext.Seed();
 
         }
     }

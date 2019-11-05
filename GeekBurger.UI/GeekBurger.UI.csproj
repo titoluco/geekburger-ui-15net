@@ -17,6 +17,8 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.2.2" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.2.0" />
+    <PackageReference Include="Fiap.GeekBurguer.Users.Contract" Version="1.0.0" />
+    <PackageReference Include="GeekBurger.StoreCatalog.Contract" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.Azure.Management.ServiceBus" Version="2.1.0" />
