@@ -15,14 +15,16 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.SignalR;
+using Fiap.GeekBurguer.Users.Contract;
 
 namespace GeekBurger.UI.Service
 {
-    public class FaceChangedService : IFaceChangedService
+    public class ShowDisplayService : IShowDisplayService
     {
-        private const string Topic = "productChanged";
+        private const string Topic = "userretrieved";
         private readonly IConfiguration _configuration;
-        private IMapper _mapper;
+        //private readonly IMapper _mapper;
         private readonly List<Message> _messages;
         private Task _lastTask;
         private readonly IServiceBusNamespace _namespace;
@@ -30,10 +32,9 @@ namespace GeekBurger.UI.Service
         private CancellationTokenSource _cancelMessages;
         private IServiceProvider _serviceProvider { get; }
 
-        public FaceChangedService(IMapper mapper,
-            IConfiguration configuration, ILogService logService, IServiceProvider serviceProvider)
+        public ShowDisplayService(IConfiguration configuration, ILogService logService, IServiceProvider serviceProvider)
         {
-            _mapper = mapper;
+            //_mapper = mapper;
             _configuration = configuration;
             _logService = logService;
             _messages = new List<Message>();
@@ -60,7 +61,31 @@ namespace GeekBurger.UI.Service
             .Select(GetMessage).ToList());
         }
 
-        private void AddOrUpdateEvent(FaceChangedEvent faceChangedEvent)
+        public void AddMessage(string label, string messsageText, IDictionary<string, object> properties = null)
+        {
+            _messages.Clear();
+            Message message = new Message();
+            message.Label = label;
+            message.Body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(messsageText));
+            if(properties != null)
+            {
+                foreach(KeyValuePair<string,object> keyValuePair in properties)
+                {
+                    message.UserProperties.Add(keyValuePair);
+                }
+            }            
+
+                //Message.SystemPropertiesCollection collection
+            _messages.Add(new Message() { Label = label, Body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(messsageText)) });
+        }
+
+        public void AddMessageObj<T>(T obj)
+        {
+            _messages.Clear();
+            _messages.Add(obj.AsMessage());
+        }
+
+        private void AddOrUpdateEvent(ShowDisplayEvent faceChangedEvent)
         {
             using (var scope = _serviceProvider.CreateScope())
             {
@@ -68,7 +93,7 @@ namespace GeekBurger.UI.Service
                     scope.ServiceProvider
                         .GetRequiredService<IFaceChangedEventRepository>();
 
-                FaceChangedEvent evt;
+                ShowDisplayEvent evt;
                 if (faceChangedEvent.EventId == Guid.Empty
                     || (evt = scopedProcessingService.Get(faceChangedEvent.EventId)) == null)
                     scopedProcessingService.Add(faceChangedEvent);
@@ -84,19 +109,19 @@ namespace GeekBurger.UI.Service
 
         public Message GetMessage(EntityEntry<FaceModel> entity)
         {
-            var faceChanged = _mapper.Map<FaceChangedMessage>(entity);
-            var faceChangedSerialized = JsonConvert.SerializeObject(faceChanged);
-            var faceChangedByteArray = Encoding.UTF8.GetBytes(faceChangedSerialized);
+            //var faceChanged = _mapper.Map<FaceChangedMessage>(entity);
+            //var faceChangedSerialized = JsonConvert.SerializeObject(faceChanged);
+            //var faceChangedByteArray = Encoding.UTF8.GetBytes(faceChangedSerialized);
 
-            var faceChangedEvent = _mapper.Map<FaceChangedEvent>(entity);
-            AddOrUpdateEvent(faceChangedEvent);
+            //var faceChangedEvent = _mapper.Map<ShowDisplayEvent>(entity);
+            //AddOrUpdateEvent(faceChangedEvent);
 
-            return new Message
-            {
-                Body = faceChangedByteArray,
-                MessageId = faceChangedEvent.EventId.ToString(),
-                Label = faceChanged.Face.UserId.ToString()
-            };
+            return new Message();
+            //{
+            //    Body = faceChangedByteArray,
+            //    MessageId = faceChangedEvent.EventId.ToString(),
+            //    Label = faceChanged.Face.UserId.ToString()
+            //};
         }
 
         public async void SendMessagesAsync()
@@ -145,7 +170,7 @@ namespace GeekBurger.UI.Service
                 else
                 {
                     if (message == null) continue;
-                    AddOrUpdateEvent(new FaceChangedEvent() { EventId = new Guid(message.MessageId) });
+                    AddOrUpdateEvent(new ShowDisplayEvent() { EventId = new Guid(message.MessageId) });
                     _messages.Remove(message);
                 }
             }
@@ -179,5 +204,7 @@ namespace GeekBurger.UI.Service
 
             return Task.CompletedTask;
         }
+    
+      
     }
 }

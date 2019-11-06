@@ -8,9 +8,11 @@ using Microsoft.Extensions.Hosting;
 
 namespace GeekBurger.UI.Service
 {
-    public interface IFaceChangedService : IHostedService
+    public interface IShowDisplayService : IHostedService
     {
         void SendMessagesAsync();
         void AddToMessageList(IEnumerable<EntityEntry<FaceModel>> changes);
+        void AddMessage(string label, string messageText, IDictionary<string, object> properties = null);
+        void AddMessageObj<T>(T obj);
     }
 }

@@ -11,9 +11,9 @@ namespace GeekBurger.UI.Repository
     public class FaceRepository : IFaceRepository
     {
         private UIContext _dbContext;
-        private IFaceChangedService _faceChangedService;
+        private IShowDisplayService _faceChangedService;
 
-        public FaceRepository(UIContext dbContext, IFaceChangedService faceChangedService)
+        public FaceRepository(UIContext dbContext, IShowDisplayService faceChangedService)
         {
             _dbContext = dbContext;
             _faceChangedService = faceChangedService;

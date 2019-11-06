@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Fiap.GeekBurguer.Users.Contract;
 
 namespace GeekBurger.UI.Helper
 {
@@ -16,10 +17,13 @@ namespace GeekBurger.UI.Helper
             CreateMap<FaceToUpsert, FaceModel>();
             CreateMap<FaceModel, FaceToUpsert>();
 
-            CreateMap<EntityEntry<FaceModel>, FaceChangedMessage>()
-            .ForMember(dest => dest.Face, opt => opt.MapFrom(src => src.Entity));
-            CreateMap<EntityEntry<FaceModel>, FaceChangedEvent>()
-            .ForMember(dest => dest.Face, opt => opt.MapFrom(src => src.Entity));
+            CreateMap<FoodRestrictions, FoodRestrictionsToUpsert>();
+            CreateMap<FoodRestrictionsToUpsert, FoodRestrictions>();
+
+            //CreateMap<EntityEntry<FaceModel>, FaceChangedMessage>()
+            //.ForMember(dest => dest.Face, opt => opt.MapFrom(src => src.Entity));
+            //CreateMap<EntityEntry<FaceModel>, ShowDisplayEvent>()
+            //.ForMember(dest => dest.Face, opt => opt.MapFrom(src => src.Entity));
         }
     }
 }

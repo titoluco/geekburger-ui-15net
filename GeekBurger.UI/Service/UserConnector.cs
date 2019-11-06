@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GeekBurger.UI.Contract;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -24,9 +25,11 @@ namespace GeekBurger.UI.Service
         }
         */
 
-        public async Task GetUserFromFace(Guid requestiD)
+        public async Task GetUserFromFace(Guid requestID)
         {
+            //MetodosApi metodosApi = new MetodosApi();
 
+            //var response = metodosApi.PostToApi().Result;
         }
         public async Task SendMessage(Guid UserId)
         {

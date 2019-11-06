@@ -14,17 +14,17 @@ namespace GeekBurger.UI.Repository
             _dbContext = dbContext;
         }
 
-        public FaceChangedEvent Get(Guid eventId)
+        public ShowDisplayEvent Get(Guid eventId)
         {
             return _dbContext.FaceChangedEvents
                 .FirstOrDefault(face => face.EventId == eventId);
         }
 
-        public bool Add(FaceChangedEvent faceChangedEvent)
+        public bool Add(ShowDisplayEvent faceChangedEvent)
         {
-            faceChangedEvent.Face =
-                _dbContext.Face
-                .FirstOrDefault(_ => _.Face == faceChangedEvent.Face.Face);
+            //faceChangedEvent.Face =
+            //    _dbContext.Face
+            //    .FirstOrDefault(_ => _.Face == faceChangedEvent.Face.Face);
 
             faceChangedEvent.EventId = Guid.NewGuid();
 
@@ -33,7 +33,7 @@ namespace GeekBurger.UI.Repository
             return true;
         }
 
-        public bool Update(FaceChangedEvent faceChangedEvent)
+        public bool Update(ShowDisplayEvent faceChangedEvent)
         {
             return true;
         }

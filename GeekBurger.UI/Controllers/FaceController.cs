@@ -10,7 +10,7 @@ using helper = GeekBurger.UI.Helper;
 using GeekBurger.UI.Model;
 using GeekBurger.UI.Repository;
 using Microsoft.AspNetCore.Mvc;
-
+using Newtonsoft.Json;
 
 namespace GeekBurger.UI.Controllers
 {
@@ -36,16 +36,20 @@ namespace GeekBurger.UI.Controllers
         [HttpPost("teste2")]
         public async Task<IActionResult> PostFaceAsync()
         {
+
+            ProductsListMessage productsListMessage = MetodosApi.retornoGet<ProductsListMessage>("http://localhost:50135/Mock/api/products");
+
             return Ok();
         }
 
         // POST api/face
         [HttpPost()]
         public async Task<IActionResult> PostFaceAsync([FromBody] FaceToUpsert face)
-        {
-            //var faceToGet = new FaceToGet() { Processing = true, UserId = "2840b416-6bef-48fc-ac64-0db3df117955" }; //_mapper.Map<FaceToGet>(face);
+        {   
             var requestiD = Guid.NewGuid();
-            await _userConnector.GetUserFromFace(requestiD);
+            //await _userConnector.GetUserFromFace(requestiD);
+            //TODO call async post to api/user and return 
+            await MetodosApi.EnvioPost("http://localhost:50135/Mock/api/user", JsonConvert.SerializeObject(face));
 
             return Ok(new FoodRestrictionsResponse { RequesterId = requestiD });
         }
