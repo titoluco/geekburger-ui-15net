@@ -61,28 +61,45 @@ namespace GeekBurger.UI.Service
             .Select(GetMessage).ToList());
         }
 
-        public void AddMessage(string label, string messsageText, IDictionary<string, object> properties = null)
+        //public void AddMessage(string label, string messsageText, IDictionary<string, object> properties = null)
+        //{
+        //    _messages.Clear();
+        //    Message message = new Message();
+        //    message.Label = label;
+        //    message.Body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(messsageText));
+        //    if(properties != null)
+        //    {
+        //        foreach(KeyValuePair<string,object> keyValuePair in properties)
+        //        {
+        //            message.UserProperties.Add(keyValuePair);
+        //        }
+        //    }            
+
+        //        //Message.SystemPropertiesCollection collection
+        //    _messages.Add(new Message() { Label = label, Body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(messsageText)) });
+        //}
+
+        //public void AddMessageObj<T>(T obj)
+        //{
+        //    _messages.Clear();
+        //    _messages.Add(obj.AsMessage());
+        //}
+
+        public void AddMessage(ShowDisplayMessage showDisplayMessage)
         {
             _messages.Clear();
             Message message = new Message();
-            message.Label = label;
-            message.Body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(messsageText));
-            if(properties != null)
+            message.Label = showDisplayMessage.Label;
+            message.Body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(showDisplayMessage.Body));
+            if (showDisplayMessage.Properties != null)
             {
-                foreach(KeyValuePair<string,object> keyValuePair in properties)
+                foreach (KeyValuePair<string, object> keyValuePair in showDisplayMessage.Properties)
                 {
                     message.UserProperties.Add(keyValuePair);
                 }
-            }            
+            }
 
-                //Message.SystemPropertiesCollection collection
-            _messages.Add(new Message() { Label = label, Body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(messsageText)) });
-        }
-
-        public void AddMessageObj<T>(T obj)
-        {
-            _messages.Clear();
-            _messages.Add(obj.AsMessage());
+            _messages.Add(showDisplayMessage.AsMessage());
         }
 
         private void AddOrUpdateEvent(ShowDisplayEvent faceChangedEvent)

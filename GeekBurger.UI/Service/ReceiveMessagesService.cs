@@ -103,9 +103,13 @@ namespace GeekBurger.UI.Service
             if (message.Body != null)
                 messageString = Encoding.UTF8.GetString(message.Body);
 
-            IDictionary<String, Object> propriedades = new Dictionary<String, Object>();
-            propriedades.Add("ServicoEnvio", "GeekBurger.UI");
-            _showDisplayService.AddMessage("showwelcomepage", "Exibir página de boas vindas", propriedades);
+            ShowDisplayMessage showDisplayMessage = new ShowDisplayMessage();
+
+            showDisplayMessage.Properties = new Dictionary<String, Object>();
+            showDisplayMessage.Properties.Add("ServicoEnvio", "GeekBurger.UI");
+            showDisplayMessage.Label = "showwelcomepage";
+            showDisplayMessage.Body = "Exibir página de boas vindas";
+            _showDisplayService.AddMessage(showDisplayMessage);
             _showDisplayService.SendMessagesAsync();
 
             return Task.CompletedTask;
@@ -126,6 +130,11 @@ namespace GeekBurger.UI.Service
 
             }
 
+
+            ShowDisplayMessage showDisplayMessage = new ShowDisplayMessage();
+            showDisplayMessage.Properties = new Dictionary<String, Object>();
+            showDisplayMessage.Properties.Add("ServicoEnvio", "GeekBurger.UI");
+
             if (userRetrievedMessage.AreRestrictionsSet)
             {
                 //TODO get para produtos
@@ -135,18 +144,19 @@ namespace GeekBurger.UI.Service
 
                 ProductsListMessage  productsListMessage =  MetodosApi.retornoGet<ProductsListMessage>("http://localhost:50135/Mock/api/products");
 
-                IDictionary<String, Object> propriedades = new Dictionary<String, Object>();
-                propriedades.Add("ServicoEnvio", "GeekBurger.UI");
-                _showDisplayService.AddMessageObj<ProductsListMessage>(productsListMessage);
+                showDisplayMessage.Label = "productsListMessage";
+                showDisplayMessage.Body = productsListMessage;
+                _showDisplayService.AddMessage(showDisplayMessage);
                 _showDisplayService.SendMessagesAsync();
+
             }
             else
-            {
-
-                IDictionary<String, Object> propriedades = new Dictionary<String, Object>();
-                propriedades.Add("ServicoEnvio", "GeekBurger.UI");
-                _showDisplayService.AddMessage("showfoodrestrictionsform", "Exibir lista de restrições", propriedades);
+            {                
+                showDisplayMessage.Label = "showfoodrestrictionsform";
+                showDisplayMessage.Body = "Exibir lista de restrições";
+                _showDisplayService.AddMessage(showDisplayMessage);
                 _showDisplayService.SendMessagesAsync();
+
             }            
 
             return Task.CompletedTask;

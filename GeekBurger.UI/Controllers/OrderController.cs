@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using GeekBurger.UI.Contract;
 using GeekBurger.UI.Service;
+using GeekBurger.UI.Model;
 
 namespace GeekBurger.UI.Controllers
 {
@@ -25,8 +26,15 @@ namespace GeekBurger.UI.Controllers
         [HttpPost()]
         public IActionResult PostOrder([FromBody] OrderToUpsert value)
         {
-            _showDisplayService.AddMessageObj<OrderToUpsert>(value);
+            ShowDisplayMessage showDisplayMessage = new ShowDisplayMessage();
+            showDisplayMessage.Properties = new Dictionary<String, Object>();
+            showDisplayMessage.Properties.Add("ServicoEnvio", "GeekBurger.UI");
+
+            showDisplayMessage.Label = "NewOrder";
+            showDisplayMessage.Body = value;
+            _showDisplayService.AddMessage(showDisplayMessage);
             _showDisplayService.SendMessagesAsync();
+
 
             return CreatedAtRoute("GetFace",
                new { OrderId = orderToGet.OrderId },

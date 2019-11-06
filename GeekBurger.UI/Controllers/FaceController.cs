@@ -32,15 +32,15 @@ namespace GeekBurger.UI.Controllers
             _mapper = mapper;
         }
 
-        // POST api/face
-        [HttpPost("teste2")]
-        public async Task<IActionResult> PostFaceAsync()
-        {
+        //// POST api/face
+        //[HttpPost("teste2")]
+        //public async Task<IActionResult> PostFaceAsync()
+        //{
 
-            ProductsListMessage productsListMessage = MetodosApi.retornoGet<ProductsListMessage>("http://localhost:50135/Mock/api/products");
+        //    ProductsListMessage productsListMessage = MetodosApi.retornoGet<ProductsListMessage>("http://localhost:50135/Mock/api/products");
 
-            return Ok();
-        }
+        //    return Ok();
+        //}
 
         // POST api/face
         [HttpPost()]
@@ -54,21 +54,21 @@ namespace GeekBurger.UI.Controllers
             return Ok(new FoodRestrictionsResponse { RequesterId = requestiD });
         }
 
-        [HttpPost("teste")]
-        public async Task<IActionResult> PostTesteFaceAsync([FromBody] FaceToUpsert faceToAdd)
-        {
-            if (faceToAdd == null)
-                return BadRequest();
-            var face = _mapper.Map<FaceModel>(faceToAdd);
-            if (face.RequesterId == Guid.Empty)
-                return new helper.UnprocessableEntityResult(ModelState);
-            _faceRepository.Add(face);
-            _faceRepository.Save();
-            var productToGet = _mapper.Map<ProductToGet>(face);
-            return CreatedAtRoute("GetProduct",
-            new { id = productToGet.ProductId },
-            productToGet);
+        //[HttpPost("teste")]
+        //public async Task<IActionResult> PostTesteFaceAsync([FromBody] FaceToUpsert faceToAdd)
+        //{
+        //    if (faceToAdd == null)
+        //        return BadRequest();
+        //    var face = _mapper.Map<FaceModel>(faceToAdd);
+        //    if (face.RequesterId == Guid.Empty)
+        //        return new helper.UnprocessableEntityResult(ModelState);
+        //    _faceRepository.Add(face);
+        //    _faceRepository.Save();
+        //    var productToGet = _mapper.Map<ProductToGet>(face);
+        //    return CreatedAtRoute("GetProduct",
+        //    new { id = productToGet.ProductId },
+        //    productToGet);
 
-        }
+        //}
     }
 }

@@ -12,7 +12,6 @@ namespace GeekBurger.UI.Service
     {
         void SendMessagesAsync();
         void AddToMessageList(IEnumerable<EntityEntry<FaceModel>> changes);
-        void AddMessage(string label, string messageText, IDictionary<string, object> properties = null);
-        void AddMessageObj<T>(T obj);
+        void AddMessage(ShowDisplayMessage showDisplayMessage);
     }
 }
