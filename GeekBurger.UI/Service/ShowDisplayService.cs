@@ -22,7 +22,7 @@ namespace GeekBurger.UI.Service
 {
     public class ShowDisplayService : IShowDisplayService
     {
-        private const string Topic = "userretrieved";
+        private const string Topic = "uicommand";
         private readonly IConfiguration _configuration;
         //private readonly IMapper _mapper;
         private readonly List<Message> _messages;

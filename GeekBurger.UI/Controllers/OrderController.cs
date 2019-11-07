@@ -24,14 +24,14 @@ namespace GeekBurger.UI.Controllers
 
         // POST api/order
         [HttpPost()]
-        public IActionResult PostOrder([FromBody] OrderToUpsert value)
+        public IActionResult PostOrder([FromBody] OrderToUpsert order)
         {
             ShowDisplayMessage showDisplayMessage = new ShowDisplayMessage();
             showDisplayMessage.Properties = new Dictionary<String, Object>();
             showDisplayMessage.Properties.Add("ServicoEnvio", "GeekBurger.UI");
 
             showDisplayMessage.Label = "NewOrder";
-            showDisplayMessage.Body = value;
+            showDisplayMessage.Body = order;
             _showDisplayService.AddMessage(showDisplayMessage);
             _showDisplayService.SendMessagesAsync();
 

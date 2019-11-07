@@ -49,8 +49,10 @@ namespace GeekBurger.UI.Controllers
             var requestiD = Guid.NewGuid();
             //await _userConnector.GetUserFromFace(requestiD);
             //TODO call async post to api/user and return 
-            await MetodosApi.EnvioPost("http://localhost:50135/Mock/api/user", JsonConvert.SerializeObject(face));
+            //await MetodosApi.EnvioPost("http://localhost:50135/Mock/api/user", JsonConvert.SerializeObject(face));
 
+            await MetodosApi.EnvioPost("http://geekburgeruser.azurewebsites.net/api/user", JsonConvert.SerializeObject(face));
+        
             return Ok(new FoodRestrictionsResponse { RequesterId = requestiD });
         }
 

@@ -124,7 +124,7 @@ namespace GeekBurger.UI.Service
             //UserRetrievedMessage userRetrievedMessage = new UserRetrievedMessage();
 
             UserRetrievedMessage userRetrievedMessage = message.As<UserRetrievedMessage>();
-            if(userRetrievedMessage == null)
+            if (userRetrievedMessage == null)
             {
                 return Task.CompletedTask;
 
@@ -141,23 +141,33 @@ namespace GeekBurger.UI.Service
                 //get api/products
                 //publish message showproduct list
 
+                //TODO confirmar se precisa passar usuarioID para pegar lista de produtos
+                //TODO inserir objeto de 
+                /*
+                //GET api/products request (on StoreCatalog
+                        API)
+                        { "StoreName": "Beverly Hills",
+                         "UserId": 1111,
+                         "Restrictions": ["soy","diary","peanut"] }
 
-                ProductsListMessage  productsListMessage =  MetodosApi.retornoGet<ProductsListMessage>("http://localhost:50135/Mock/api/products");
+                 * */
+                //ProductsListMessage productsListMessage = MetodosApi.retornoGet<ProductsListMessage>("http://localhost:50135/Mock/api/products");
+                ProductsListMessage productsListMessage = MetodosApi.retornoGet<ProductsListMessage>("http://geekburgerstorecatalog.azurewebsites.net/api/products");
 
-                showDisplayMessage.Label = "productsListMessage";
+                showDisplayMessage.Label = "ShowProductsList";
                 showDisplayMessage.Body = productsListMessage;
                 _showDisplayService.AddMessage(showDisplayMessage);
                 _showDisplayService.SendMessagesAsync();
 
             }
             else
-            {                
+            {
                 showDisplayMessage.Label = "showfoodrestrictionsform";
-                showDisplayMessage.Body = "Exibir lista de restrições";
+                showDisplayMessage.Body = "<inserir objeto { UserId: 1111, RequesterId: 1111> }";
                 _showDisplayService.AddMessage(showDisplayMessage);
                 _showDisplayService.SendMessagesAsync();
 
-            }            
+            }
 
             return Task.CompletedTask;
         }
@@ -170,6 +180,6 @@ namespace GeekBurger.UI.Service
             return Task.CompletedTask;
         }
 
-        
+
     }
 }

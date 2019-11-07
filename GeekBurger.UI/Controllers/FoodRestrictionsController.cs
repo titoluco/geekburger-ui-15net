@@ -28,7 +28,8 @@ namespace GeekBurger.UI.Controllers
         public async Task<IActionResult> PostFoodRestrictions([FromBody] FoodRestrictionsToUpsert foodRestrictionsAdd)
         {
 
-            await MetodosApi.EnvioPost("http://localhost:50135/Mock/api/FoodRestrictions", JsonConvert.SerializeObject(foodRestrictionsAdd));
+            //await MetodosApi.EnvioPost("http://localhost:50135/Mock/api/FoodRestrictions", JsonConvert.SerializeObject(foodRestrictionsAdd));
+            await MetodosApi.EnvioPost("http://geekburgeruser.azurewebsites.net/api/FoodRestrictions", JsonConvert.SerializeObject(foodRestrictionsAdd));
 
             return CreatedAtRoute("FoodRestrictions",
                new { id = foodRestrictions.UserId },
