@@ -45,15 +45,14 @@ namespace GeekBurger.UI.Controllers
         // POST api/face
         [HttpPost()]
         public async Task<IActionResult> PostFaceAsync([FromBody] FaceToUpsert face)
-        {   
-            var requestiD = Guid.NewGuid();
+        {
             //await _userConnector.GetUserFromFace(requestiD);
             //TODO call async post to api/user and return 
             //await MetodosApi.EnvioPost("http://localhost:50135/Mock/api/user", JsonConvert.SerializeObject(face));
 
             await MetodosApi.EnvioPost("http://geekburgeruser.azurewebsites.net/api/user", JsonConvert.SerializeObject(face));
         
-            return Ok(new FoodRestrictionsResponse { RequesterId = requestiD });
+            return Ok(new FoodRestrictionsResponse { RequesterId = face.RequesterId });
         }
 
         //[HttpPost("teste")]

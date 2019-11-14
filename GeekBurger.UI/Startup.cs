@@ -59,7 +59,10 @@ namespace GeekBurger.UI
             });
 
             services.AddSingleton<IUserConnector, UserConnector>();
+
+            services.AddSingleton<IServiceBusTopics, ServiceBusTopics>();
             services.AddSingleton<IReceiveMessagesFactory, ReceiveMessagesFactory>();
+            services.AddSingleton<IReadStoreCatalog, ReadStoreCatalog>();
             services.AddAutoMapper();
             services.AddSignalR();
             //services.AddPollyPolicies();
@@ -113,13 +116,16 @@ namespace GeekBurger.UI
             {
                 routes.MapHub<MessageHub>("/messagehub");
             });
-
+            
+            //criação dos tópicos e subscribers
+            app.ApplicationServices.GetService<IServiceBusTopics>();
+            
+            //instancia que receberá as mensagens
             app.ApplicationServices.GetService<IReceiveMessagesFactory>();
 
+            //instancia da lista de catálogos
+            app.ApplicationServices.GetService<IReadStoreCatalog>();
             
-
-            //uIContext.Seed();
-
         }
     }
 }

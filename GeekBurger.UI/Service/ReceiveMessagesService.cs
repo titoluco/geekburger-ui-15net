@@ -13,6 +13,7 @@ using System.Linq;
 using GeekBurger.UI.Model;
 using Newtonsoft.Json;
 using GeekBurger.UI.Contract;
+using GeekBurger.UI.Helper;
 
 namespace GeekBurger.UI.Service
 {
@@ -24,6 +25,7 @@ namespace GeekBurger.UI.Service
         private readonly string _subscriptionName;
         private readonly IHubContext<MessageHub> _hubContext;
         private readonly ILogger<ReceiveMessagesService> _logger;
+        private readonly ILogService _logService;
         private readonly IShowDisplayService _showDisplayService;
 
         private CancellationTokenSource _cancelMessages;
@@ -33,10 +35,11 @@ namespace GeekBurger.UI.Service
         private readonly List<Message> _messages;
         */
 
-        public ReceiveMessagesService(IHubContext<MessageHub> hubContext, ILogger<ReceiveMessagesService> logger, IShowDisplayService showDisplayService,
+        public ReceiveMessagesService(IHubContext<MessageHub> hubContext, ILogger<ReceiveMessagesService> logger, IShowDisplayService showDisplayService, ILogService logService,
             string topic, string subscription, string filterName = null, string filter = null)
         {
-            _logger = logger;
+            _logger = logger;//TODO ver se faz sentido remover este log
+            _logService = logService; //log no servicebus
             _hubContext = hubContext;
             _showDisplayService = showDisplayService;
 
@@ -90,86 +93,119 @@ namespace GeekBurger.UI.Service
 
         private Task HandleStoreCatalogReady(Message message, CancellationToken arg2)
         {
-            /*
-            UserRetrievedMessage userRetrievedMessage = new UserRetrievedMessage() { UserId = new Guid(), AreRestrictionsSet = true };
+            try
+            {
 
-            _showDisplayService.AddMessageObj<UserRetrievedMessage>(userRetrievedMessage);
-            _showDisplayService.SendMessagesAsync();
+                _logService.SendMessagesAsync($"- Iniciando leitura de HandleStoreCatalogReady");
 
+                var messageString = "";
+                if (message.Body != null)
+                    messageString = Encoding.UTF8.GetString(message.Body);
 
-            return Task.CompletedTask;
-            */
-            var messageString = "";
-            if (message.Body != null)
-                messageString = Encoding.UTF8.GetString(message.Body);
+                ShowDisplayMessage showDisplayMessage = new ShowDisplayMessage();
 
-            ShowDisplayMessage showDisplayMessage = new ShowDisplayMessage();
+                showDisplayMessage.Properties = new Dictionary<String, Object>();
+                showDisplayMessage.Properties.Add("ServicoEnvio", "GeekBurger.UI");
+                showDisplayMessage.Label = "showwelcomepage";
+                showDisplayMessage.Body = "Exibir página de boas vindas";
+                _showDisplayService.AddMessage(showDisplayMessage);
+                _showDisplayService.SendMessagesAsync(Topics.uicommand);
 
-            showDisplayMessage.Properties = new Dictionary<String, Object>();
-            showDisplayMessage.Properties.Add("ServicoEnvio", "GeekBurger.UI");
-            showDisplayMessage.Label = "showwelcomepage";
-            showDisplayMessage.Body = "Exibir página de boas vindas";
-            _showDisplayService.AddMessage(showDisplayMessage);
-            _showDisplayService.SendMessagesAsync();
+                return Task.CompletedTask;
+            }
+            catch (Exception ex)
+            {
 
-            return Task.CompletedTask;
+                throw ex;
+            }
         }
 
         private Task HandleUserRetrieved(Message message, CancellationToken arg2)
         {
-            var messageString = "";
-            if (message.Body != null)
-                messageString = Encoding.UTF8.GetString(message.Body);
-
-            //UserRetrievedMessage userRetrievedMessage = new UserRetrievedMessage();
-
-            UserRetrievedMessage userRetrievedMessage = message.As<UserRetrievedMessage>();
-            if (userRetrievedMessage == null)
+            try
             {
+
+                _logger.LogInformation($"- Iniciando leitura de HandleUserRetrieved");
+                _logService.SendMessagesAsync($"- Iniciando leitura de HandleUserRetrieved");
+
+                UserRetrievedMessage userRetrievedMessage;
+
+                var messageString = "";
+                if (message.Body != null)
+                    messageString = Encoding.UTF8.GetString(message.Body);
+
+                //UserRetrievedMessage userRetrievedMessage = new UserRetrievedMessage();
+                try
+                {
+                    userRetrievedMessage = message.As<UserRetrievedMessage>();
+                    if (userRetrievedMessage == null)
+                    {
+                        return Task.CompletedTask;
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    //mensagem inválida para nosso contexto
+                    return Task.CompletedTask;
+                }
+
+                ShowDisplayMessage showDisplayMessage = new ShowDisplayMessage();
+                showDisplayMessage.Properties = new Dictionary<String, Object>();
+                showDisplayMessage.Properties.Add("ServicoEnvio", "GeekBurger.UI");
+
+                if (userRetrievedMessage.AreRestrictionsSet)
+                {
+                    //TODO get para produtos
+                    //get api/products
+                    //publish message showproduct list
+
+                    //TODO confirmar se precisa passar usuarioID para pegar lista de produtos
+                    //TODO inserir objeto de 
+                    /*
+                    //GET api/products request (on StoreCatalog
+                            API)
+                            { "StoreName": "Beverly Hills",
+                             "UserId": 1111,
+                             "Restrictions": ["soy","diary","peanut"] }
+
+                     * */
+                    //ProductsListMessage productsListMessage = MetodosApi.retornoGet<ProductsListMessage>("http://localhost:50135/Mock/api/products");
+
+                    IList<string> restrictionList = MetodosApi.retornoGet<List<string>>($"https://geekburgeruser.azurewebsites.net/api/FoodRestriction/{userRetrievedMessage.UserId}/GetFoodRestrictionsByUserId");
+
+                    var storename = "Los Angeles - Pasadena";
+                    string url = $"http://geekburgerstorecatalog.azurewebsites.net/api/products?StoreName={storename}&UserId={userRetrievedMessage.UserId}&Restrictions={restrictionList.Aggregate((i, j) => i + " =" + j)}";
+
+                    StoreCatalog.Contract.Requests.ProductRequest productRequest = new StoreCatalog.Contract.Requests.ProductRequest()
+                    {
+                        UserId = userRetrievedMessage.UserId,
+                        StoreName = "",
+                        Restrictions = restrictionList
+
+                    };
+
+                    ProductsListMessage productsListMessage = MetodosApi.retornoGet<ProductsListMessage>(url);
+
+                    showDisplayMessage.Label = "ShowProductsList";
+                    showDisplayMessage.Body = productsListMessage;
+                }
+                else
+                {
+                    showDisplayMessage.Label = "showfoodrestrictionsform";
+                    showDisplayMessage.Body = "<inserir objeto { UserId: 1111, RequesterId: 1111> }";
+                }
+
+                _showDisplayService.AddMessage(showDisplayMessage);
+                _showDisplayService.SendMessagesAsync(Topics.uicommand);
+
                 return Task.CompletedTask;
-
             }
-
-
-            ShowDisplayMessage showDisplayMessage = new ShowDisplayMessage();
-            showDisplayMessage.Properties = new Dictionary<String, Object>();
-            showDisplayMessage.Properties.Add("ServicoEnvio", "GeekBurger.UI");
-
-            if (userRetrievedMessage.AreRestrictionsSet)
+            catch (Exception ex)
             {
-                //TODO get para produtos
-                //get api/products
-                //publish message showproduct list
 
-                //TODO confirmar se precisa passar usuarioID para pegar lista de produtos
-                //TODO inserir objeto de 
-                /*
-                //GET api/products request (on StoreCatalog
-                        API)
-                        { "StoreName": "Beverly Hills",
-                         "UserId": 1111,
-                         "Restrictions": ["soy","diary","peanut"] }
-
-                 * */
-                //ProductsListMessage productsListMessage = MetodosApi.retornoGet<ProductsListMessage>("http://localhost:50135/Mock/api/products");
-                ProductsListMessage productsListMessage = MetodosApi.retornoGet<ProductsListMessage>("http://geekburgerstorecatalog.azurewebsites.net/api/products");
-
-                showDisplayMessage.Label = "ShowProductsList";
-                showDisplayMessage.Body = productsListMessage;
-                _showDisplayService.AddMessage(showDisplayMessage);
-                _showDisplayService.SendMessagesAsync();
-
+                throw ex;
             }
-            else
-            {
-                showDisplayMessage.Label = "showfoodrestrictionsform";
-                showDisplayMessage.Body = "<inserir objeto { UserId: 1111, RequesterId: 1111> }";
-                _showDisplayService.AddMessage(showDisplayMessage);
-                _showDisplayService.SendMessagesAsync();
-
-            }
-
-            return Task.CompletedTask;
         }
 
         private Task ExceptionHandle(ExceptionReceivedEventArgs arg)

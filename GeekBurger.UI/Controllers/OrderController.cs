@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using GeekBurger.UI.Contract;
 using GeekBurger.UI.Service;
 using GeekBurger.UI.Model;
+using GeekBurger.UI.Helper;
 
 namespace GeekBurger.UI.Controllers
 {
@@ -33,7 +34,7 @@ namespace GeekBurger.UI.Controllers
             showDisplayMessage.Label = "NewOrder";
             showDisplayMessage.Body = order;
             _showDisplayService.AddMessage(showDisplayMessage);
-            _showDisplayService.SendMessagesAsync();
+            _showDisplayService.SendMessagesAsync(Topics.neworder);
 
 
             return CreatedAtRoute("GetFace",

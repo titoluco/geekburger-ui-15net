@@ -17,12 +17,13 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.SignalR;
 using Fiap.GeekBurguer.Users.Contract;
+using GeekBurger.UI.Helper;
 
 namespace GeekBurger.UI.Service
 {
     public class ShowDisplayService : IShowDisplayService
     {
-        private const string Topic = "uicommand";
+        //private const string Topic = "uicommand";
         private readonly IConfiguration _configuration;
         //private readonly IMapper _mapper;
         private readonly List<Message> _messages;
@@ -43,15 +44,22 @@ namespace GeekBurger.UI.Service
             _serviceProvider = serviceProvider;
         }
 
-        public void EnsureTopicIsCreated()
-        {
-            if (!_namespace.Topics.List()
-                .Any(topic => topic.Name
-                    .Equals(Topic, StringComparison.InvariantCultureIgnoreCase)))
-                _namespace.Topics.Define(Topic)
-                    .WithSizeInMB(1024).Create();
+        //public void EnsureTopicIsCreated()
+        //{
 
-        }
+        //    if (!_namespace.Topics.List()
+        //        .Any(topic => topic.Name
+        //            .Equals(Topics.uicommand.ToString(), StringComparison.InvariantCultureIgnoreCase)))
+        //        _namespace.Topics.Define(Topics.uicommand.ToString())
+        //            .WithSizeInMB(1024).Create();
+
+        //    if (!_namespace.Topics.List()
+        //        .Any(topic => topic.Name
+        //            .Equals(Topics.neworder.ToString(), StringComparison.InvariantCultureIgnoreCase)))
+        //        _namespace.Topics.Define(Topics.neworder.ToString())
+        //            .WithSizeInMB(1024).Create();
+
+        //}
 
         public void AddToMessageList(IEnumerable<EntityEntry<FaceModel>> changes)
         {
@@ -61,29 +69,6 @@ namespace GeekBurger.UI.Service
             .Select(GetMessage).ToList());
         }
 
-        //public void AddMessage(string label, string messsageText, IDictionary<string, object> properties = null)
-        //{
-        //    _messages.Clear();
-        //    Message message = new Message();
-        //    message.Label = label;
-        //    message.Body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(messsageText));
-        //    if(properties != null)
-        //    {
-        //        foreach(KeyValuePair<string,object> keyValuePair in properties)
-        //        {
-        //            message.UserProperties.Add(keyValuePair);
-        //        }
-        //    }            
-
-        //        //Message.SystemPropertiesCollection collection
-        //    _messages.Add(new Message() { Label = label, Body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(messsageText)) });
-        //}
-
-        //public void AddMessageObj<T>(T obj)
-        //{
-        //    _messages.Clear();
-        //    _messages.Add(obj.AsMessage());
-        //}
 
         public void AddMessage(ShowDisplayMessage showDisplayMessage)
         {
@@ -141,23 +126,32 @@ namespace GeekBurger.UI.Service
             //};
         }
 
-        public async void SendMessagesAsync()
+        public async void SendMessagesAsync(Topics topic)
         {
-            if (_lastTask != null && !_lastTask.IsCompleted)
-                return;
+            try
+            {
+                if (_lastTask != null && !_lastTask.IsCompleted)
+                    return;
 
-            var config = _configuration.GetSection("serviceBus").Get<ServiceBusConfiguration>();
-            var topicClient = new TopicClient(config.ConnectionString, Topic);
+                var config = _configuration.GetSection("serviceBus").Get<ServiceBusConfiguration>();
+                var topicClient = new TopicClient(config.ConnectionString, topic.ToString());
 
-            _logService.SendMessagesAsync("Face was changed");
+                _logService.SendMessagesAsync("Face was changed");
 
-            _lastTask = SendAsync(topicClient, _cancelMessages.Token);
+                _lastTask = SendAsync(topicClient, _cancelMessages.Token);
 
-            await _lastTask;
+                await _lastTask;
 
-            var closeTask = topicClient.CloseAsync();
-            await closeTask;
-            HandleException(closeTask);
+                var closeTask = topicClient.CloseAsync();
+                await closeTask;
+                HandleException(closeTask);
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         public async Task SendAsync(TopicClient topicClient,
@@ -187,7 +181,7 @@ namespace GeekBurger.UI.Service
                 else
                 {
                     if (message == null) continue;
-                    AddOrUpdateEvent(new ShowDisplayEvent() { EventId = new Guid(message.MessageId) });
+                    ///AddOrUpdateEvent(new ShowDisplayEvent() { EventId = new Guid(message.MessageId) });
                     _messages.Remove(message);
                 }
             }
@@ -210,7 +204,7 @@ namespace GeekBurger.UI.Service
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            EnsureTopicIsCreated();
+            //EnsureTopicIsCreated();
 
             return Task.CompletedTask;
         }
@@ -221,7 +215,7 @@ namespace GeekBurger.UI.Service
 
             return Task.CompletedTask;
         }
-    
-      
+
+
     }
 }

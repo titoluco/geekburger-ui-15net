@@ -22,16 +22,27 @@ namespace GeekBurger.UI.Service
 
         public static T retornoGet<T>(string url)
         {
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, url);
-            HttpResponseMessage result = client.SendAsync(request).Result;
-            var retorno = result.Content.ReadAsStringAsync().Result;
-
-            if (result.StatusCode != System.Net.HttpStatusCode.OK)
+            try
             {
-                throw new Exception(retorno);
-            }
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, url);
+                HttpResponseMessage result = client.SendAsync(request).Result;
+                var retorno = result.Content.ReadAsStringAsync().Result;
 
-            return JsonConvert.DeserializeObject<T>(retorno);
+                if (result.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    throw new Exception(retorno);
+                }
+
+                return JsonConvert.DeserializeObject<T>(retorno);
+
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex);
+                return default(T);
+            }
 
         }
 

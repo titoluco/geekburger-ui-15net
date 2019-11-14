@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GeekBurger.UI.Helper;
 using GeekBurger.UI.Model;
 using StoreCatalog.Contract;
 
 namespace GeekBurger.UI.Service
 {
-    public class ReadStoreCatalog
+    public class ReadStoreCatalog : IReadStoreCatalog
     {
 
         private readonly IShowDisplayService _showDisplayService;
@@ -16,16 +17,17 @@ namespace GeekBurger.UI.Service
         public ReadStoreCatalog(IShowDisplayService showDisplayService)
         {
             _showDisplayService = showDisplayService;
+            CatalogVerify();
         }
         public void CatalogVerify()
         {
 
             //Ready ready = MetodosApi.retornoGet<Ready>("http://localhost:50135/Mock/api/store");
+
+
             Ready ready = MetodosApi.retornoGet<Ready>("http://geekburgerstorecatalog.azurewebsites.net/api/store");
 
 
-
-        
             ShowDisplayMessage showDisplayMessage = new ShowDisplayMessage();
 
             showDisplayMessage.Properties = new Dictionary<String, Object>();
@@ -35,7 +37,7 @@ namespace GeekBurger.UI.Service
             if ((bool)ready?.IsReady)
             {
                 showDisplayMessage.Label = "showwelcomepage";
-                showDisplayMessage.Body = "Exibir página de boas vindas";                
+                showDisplayMessage.Body = "Exibir página de boas vindas";
             }
             else
             {
@@ -44,7 +46,7 @@ namespace GeekBurger.UI.Service
             }
 
             _showDisplayService.AddMessage(showDisplayMessage);
-            _showDisplayService.SendMessagesAsync();
+            _showDisplayService.SendMessagesAsync(Topics.uicommand);
 
         }
     }

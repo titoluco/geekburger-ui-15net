@@ -19,7 +19,7 @@ namespace GeekBurger.UI.Service
 {
     public class LogService : ILogService
     {
-        private const string MicroService = "Products";
+        private const string MicroService = "UI";
         private const string Topic = "Log";
         private IConfiguration _configuration;
         //private IMapper _mapper;

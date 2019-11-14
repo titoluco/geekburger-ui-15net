@@ -1,4 +1,5 @@
-﻿using GeekBurger.UI.Model;
+﻿using GeekBurger.UI.Helper;
+using GeekBurger.UI.Model;
 using GeekBurger.UI.Service;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -69,7 +70,7 @@ namespace GeekBurger.UI.Repository
 
             _dbContext.SaveChanges();
 
-            _faceChangedService.SendMessagesAsync();
+            _faceChangedService.SendMessagesAsync(Topics.uicommand);
         }
 
     }
