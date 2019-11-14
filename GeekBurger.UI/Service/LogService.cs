@@ -19,17 +19,18 @@ namespace GeekBurger.UI.Service
 {
     public class LogService : ILogService
     {
-        private const string MicroService = "Products";
+        private const string MicroService = "UI";
         private const string Topic = "Log";
         private IConfiguration _configuration;
-        private IMapper _mapper;
+        //private IMapper _mapper;
         private List<Message> _messages;
         private Task _lastTask;
         private IServiceBusNamespace _namespace;
 
-        public LogService(IMapper mapper, IConfiguration configuration)
+        //public LogService(IMapper mapper, IConfiguration configuration)
+        public LogService(IConfiguration configuration)
         {
-            _mapper = mapper;
+            //_mapper = mapper;
             _configuration = configuration;
             _messages = new List<Message>();
             _namespace = _configuration.GetServiceBusNamespace();

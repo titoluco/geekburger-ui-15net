@@ -5,15 +5,13 @@ using GeekBurger.UI.Contract;
 
 namespace GeekBurger.UI.Model
 {
-    public class FaceChangedEvent
+    public class ShowDisplayEvent
     {
-        [Key]
         public Guid EventId { get; set; }
 
         public State State { get; set; }
-
-        [ForeignKey("ProductId")]
-        public FaceModel Face { get; set; }
+ 
+        public string MessageType { get; set; }
 
         public bool MessageSent { get; set; }
     }

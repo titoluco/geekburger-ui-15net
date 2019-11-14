@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeekBurger.UI.Contract", "G
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeekBurger.UI.Tests", "GeekBurger.UI.Tests\GeekBurger.UI.Tests.csproj", "{89A2DA52-74BD-4FDA-81D5-636C0A85F5D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeekBurger.UI.Mock", "GeekBurger.UI.Mock\GeekBurger.UI.Mock.csproj", "{AB4ACF72-0B19-4861-8C0A-452824C896D9}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

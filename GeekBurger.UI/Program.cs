@@ -7,13 +7,12 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-
 namespace GeekBurger.UI
 {
     public class Program
     {
         public static void Main(string[] args)
-        {
+        {            
             CreateWebHostBuilder(args).Build().Run();
         }
 

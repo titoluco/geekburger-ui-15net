@@ -21,6 +21,7 @@ using GeekBurger.UI.Service;
 using GeekBurger.UI.Repository;
 //using Microsoft.AspNetCore.Hosting.Internal;
 
+
 namespace GeekBurger.UI
 {
     public class Startup
@@ -58,9 +59,13 @@ namespace GeekBurger.UI
             });
 
             services.AddSingleton<IUserConnector, UserConnector>();
+
+            services.AddSingleton<IServiceBusTopics, ServiceBusTopics>();
             services.AddSingleton<IReceiveMessagesFactory, ReceiveMessagesFactory>();
+            services.AddSingleton<IReadStoreCatalog, ReadStoreCatalog>();
             services.AddAutoMapper();
             services.AddSignalR();
+            //services.AddPollyPolicies();
 
             services.AddDbContext<UIContext>
            (o => o.UseInMemoryDatabase("geekburger-ui"));
@@ -74,10 +79,10 @@ namespace GeekBurger.UI
             //services.AddEntityFrameworkSqlite()
             //    .AddDbContext<UIContext>(o => o.UseSqlite(connection));
 
-            services.AddScoped<IFaceChangedEventRepository, FaceChangedEventRepository>();
+            //services.AddScoped<IFaceChangedEventRepository, FaceChangedEventRepository>();
             services.AddScoped<IFaceRepository, FaceRepository>();
-            services.AddScoped<IFaceChangedService, FaceChangedService>();
-            services.AddScoped<ILogService, LogService>();
+            services.AddSingleton<IShowDisplayService, ShowDisplayService>();
+            services.AddSingleton<ILogService, LogService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -111,11 +116,16 @@ namespace GeekBurger.UI
             {
                 routes.MapHub<MessageHub>("/messagehub");
             });
-
+            
+            //criação dos tópicos e subscribers
+            app.ApplicationServices.GetService<IServiceBusTopics>();
+            
+            //instancia que receberá as mensagens
             app.ApplicationServices.GetService<IReceiveMessagesFactory>();
 
-            //uIContext.Seed();
-
+            //instancia da lista de catálogos
+            app.ApplicationServices.GetService<IReadStoreCatalog>();
+            
         }
     }
 }

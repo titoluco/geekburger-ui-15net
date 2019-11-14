@@ -6,6 +6,8 @@ using GeekBurger.UI.Model;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Swagger;
 using GeekBurger.UI.Contract;
+using Newtonsoft.Json;
+using GeekBurger.UI.Service;
 
 namespace GeekBurger.UI.Controllers
 {
@@ -23,11 +25,16 @@ namespace GeekBurger.UI.Controllers
 
         //api/FoodRestrictions
         [HttpPost()]
-        public IActionResult PostFoodRestrictions([FromBody] FoodRestrictionsToUpsert foodRestrictionsAdd)
+        public async Task<IActionResult> PostFoodRestrictions([FromBody] FoodRestrictionsToUpsert foodRestrictionsAdd)
         {
+
+            //await MetodosApi.EnvioPost("http://localhost:50135/Mock/api/FoodRestrictions", JsonConvert.SerializeObject(foodRestrictionsAdd));
+            await MetodosApi.EnvioPost("http://geekburgeruser.azurewebsites.net/api/FoodRestrictions", JsonConvert.SerializeObject(foodRestrictionsAdd));
+
             return CreatedAtRoute("FoodRestrictions",
                new { id = foodRestrictions.UserId },
                foodRestrictions);
+            //TODO post to food restrictions 
         }
     }
 }

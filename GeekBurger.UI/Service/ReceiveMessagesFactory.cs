@@ -1,4 +1,5 @@
 ﻿using GeekBurger.UI.Contract;
+using GeekBurger.UI.Helper;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 
@@ -8,21 +9,29 @@ namespace GeekBurger.UI.Service
     {
         private readonly IHubContext<MessageHub> _hubContext;
         private readonly ILogger<ReceiveMessagesService> _logger;
-        public ReceiveMessagesFactory(IHubContext<MessageHub> hubContext, ILogger<ReceiveMessagesService> logger)
+        private readonly IShowDisplayService _showDisplayService;
+
+        private readonly ILogService _logService;
+
+
+        public ReceiveMessagesFactory(IHubContext<MessageHub> hubContext, ILogger<ReceiveMessagesService> logger, IShowDisplayService showDisplayService, ILogService logService)
         {
 
             _hubContext = hubContext;
             _logger = logger;
-
+            _showDisplayService = showDisplayService;
+            _logService = logService;
             //By default, creates this receivemessageservice
-            CreateNew("storecatalogread", "html");
-            CreateNew("userretrieve", "html");
+            CreateNew(Topics.storecatalogready.ToString(), "UI");
+            CreateNew(Topics.userretrieved.ToString(), "UI");
             //CreateNew("orderpaid", "html", "filter-store", "8048e9ec-80fe-4bad-bc2a-e4f4a75c834e");
-        }
+
+    }
 
         public ReceiveMessagesService CreateNew(string topic, string subscription, string filterName = null, string filter = null)
         {
-            return new ReceiveMessagesService(_hubContext, _logger, topic, subscription, filterName, filter);
+            return new ReceiveMessagesService(_hubContext, _logger, _showDisplayService, _logService, topic, subscription, filterName, filter);
         }
+
     }
 }

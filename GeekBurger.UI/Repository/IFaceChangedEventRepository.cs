@@ -5,9 +5,9 @@ namespace GeekBurger.UI.Repository
 {
     public interface IFaceChangedEventRepository
     {
-        FaceChangedEvent Get(Guid eventId);
-        bool Add(FaceChangedEvent faceChangedEvent);
-        bool Update(FaceChangedEvent faceChangedEvent);
+        ShowDisplayEvent Get(Guid eventId);
+        bool Add(ShowDisplayEvent faceChangedEvent);
+        bool Update(ShowDisplayEvent faceChangedEvent);
         void Save();
     }
 }

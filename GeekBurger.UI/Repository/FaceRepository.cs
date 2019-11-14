@@ -1,4 +1,5 @@
-﻿using GeekBurger.UI.Model;
+﻿using GeekBurger.UI.Helper;
+using GeekBurger.UI.Model;
 using GeekBurger.UI.Service;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,9 +12,9 @@ namespace GeekBurger.UI.Repository
     public class FaceRepository : IFaceRepository
     {
         private UIContext _dbContext;
-        private IFaceChangedService _faceChangedService;
+        private IShowDisplayService _faceChangedService;
 
-        public FaceRepository(UIContext dbContext, IFaceChangedService faceChangedService)
+        public FaceRepository(UIContext dbContext, IShowDisplayService faceChangedService)
         {
             _dbContext = dbContext;
             _faceChangedService = faceChangedService;
@@ -69,7 +70,7 @@ namespace GeekBurger.UI.Repository
 
             _dbContext.SaveChanges();
 
-            _faceChangedService.SendMessagesAsync();
+            _faceChangedService.SendMessagesAsync(Topics.uicommand);
         }
 
     }

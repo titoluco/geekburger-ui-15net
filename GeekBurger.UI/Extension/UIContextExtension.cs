@@ -25,7 +25,7 @@ namespace GeekBurger.UI.Extension
 
             dbContext.Face.AddRange(new List<FaceModel> {
                 new FaceModel { Face = Convert.FromBase64String(aaa), RequesterId =  new Guid("8048e9ec-80fe-4bad-bc2a-e4f4a75c834e") },  //, UserId = new Guid("8048e9ec-80fe-4bad-bc2a-e4f4a75c834e") },
-                new FaceModel { Face = Convert.FromBase64String(aaa), RequesterId = new Guid("8048e9ec-80fe-4bad-bc2a-e4f4a75c834e") } // UserId = new Guid("8048e9ec-80fe-4bad-bc2a-e4f4a75c834e") }
+                new FaceModel { Face = Convert.FromBase64String(aaa), RequesterId = new Guid("bc65b148-556d-4d3d-a8a2-cba1ede632ac") } // UserId = new Guid("8048e9ec-80fe-4bad-bc2a-e4f4a75c834e") }
             });
 
             /*

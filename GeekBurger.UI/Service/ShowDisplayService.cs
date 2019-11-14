@@ -15,14 +15,17 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.SignalR;
+using Fiap.GeekBurguer.Users.Contract;
+using GeekBurger.UI.Helper;
 
 namespace GeekBurger.UI.Service
 {
-    public class FaceChangedService : IFaceChangedService
+    public class ShowDisplayService : IShowDisplayService
     {
-        private const string Topic = "productChanged";
+        //private const string Topic = "uicommand";
         private readonly IConfiguration _configuration;
-        private IMapper _mapper;
+        //private readonly IMapper _mapper;
         private readonly List<Message> _messages;
         private Task _lastTask;
         private readonly IServiceBusNamespace _namespace;
@@ -30,10 +33,9 @@ namespace GeekBurger.UI.Service
         private CancellationTokenSource _cancelMessages;
         private IServiceProvider _serviceProvider { get; }
 
-        public FaceChangedService(IMapper mapper,
-            IConfiguration configuration, ILogService logService, IServiceProvider serviceProvider)
+        public ShowDisplayService(IConfiguration configuration, ILogService logService, IServiceProvider serviceProvider)
         {
-            _mapper = mapper;
+            //_mapper = mapper;
             _configuration = configuration;
             _logService = logService;
             _messages = new List<Message>();
@@ -42,15 +44,22 @@ namespace GeekBurger.UI.Service
             _serviceProvider = serviceProvider;
         }
 
-        public void EnsureTopicIsCreated()
-        {
-            if (!_namespace.Topics.List()
-                .Any(topic => topic.Name
-                    .Equals(Topic, StringComparison.InvariantCultureIgnoreCase)))
-                _namespace.Topics.Define(Topic)
-                    .WithSizeInMB(1024).Create();
+        //public void EnsureTopicIsCreated()
+        //{
 
-        }
+        //    if (!_namespace.Topics.List()
+        //        .Any(topic => topic.Name
+        //            .Equals(Topics.uicommand.ToString(), StringComparison.InvariantCultureIgnoreCase)))
+        //        _namespace.Topics.Define(Topics.uicommand.ToString())
+        //            .WithSizeInMB(1024).Create();
+
+        //    if (!_namespace.Topics.List()
+        //        .Any(topic => topic.Name
+        //            .Equals(Topics.neworder.ToString(), StringComparison.InvariantCultureIgnoreCase)))
+        //        _namespace.Topics.Define(Topics.neworder.ToString())
+        //            .WithSizeInMB(1024).Create();
+
+        //}
 
         public void AddToMessageList(IEnumerable<EntityEntry<FaceModel>> changes)
         {
@@ -60,7 +69,25 @@ namespace GeekBurger.UI.Service
             .Select(GetMessage).ToList());
         }
 
-        private void AddOrUpdateEvent(FaceChangedEvent faceChangedEvent)
+
+        public void AddMessage(ShowDisplayMessage showDisplayMessage)
+        {
+            _messages.Clear();
+            Message message = new Message();
+            message.Label = showDisplayMessage.Label;
+            message.Body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(showDisplayMessage.Body));
+            if (showDisplayMessage.Properties != null)
+            {
+                foreach (KeyValuePair<string, object> keyValuePair in showDisplayMessage.Properties)
+                {
+                    message.UserProperties.Add(keyValuePair);
+                }
+            }
+
+            _messages.Add(showDisplayMessage.AsMessage());
+        }
+
+        private void AddOrUpdateEvent(ShowDisplayEvent faceChangedEvent)
         {
             using (var scope = _serviceProvider.CreateScope())
             {
@@ -68,7 +95,7 @@ namespace GeekBurger.UI.Service
                     scope.ServiceProvider
                         .GetRequiredService<IFaceChangedEventRepository>();
 
-                FaceChangedEvent evt;
+                ShowDisplayEvent evt;
                 if (faceChangedEvent.EventId == Guid.Empty
                     || (evt = scopedProcessingService.Get(faceChangedEvent.EventId)) == null)
                     scopedProcessingService.Add(faceChangedEvent);
@@ -84,38 +111,47 @@ namespace GeekBurger.UI.Service
 
         public Message GetMessage(EntityEntry<FaceModel> entity)
         {
-            var faceChanged = _mapper.Map<FaceChangedMessage>(entity);
-            var faceChangedSerialized = JsonConvert.SerializeObject(faceChanged);
-            var faceChangedByteArray = Encoding.UTF8.GetBytes(faceChangedSerialized);
+            //var faceChanged = _mapper.Map<FaceChangedMessage>(entity);
+            //var faceChangedSerialized = JsonConvert.SerializeObject(faceChanged);
+            //var faceChangedByteArray = Encoding.UTF8.GetBytes(faceChangedSerialized);
 
-            var faceChangedEvent = _mapper.Map<FaceChangedEvent>(entity);
-            AddOrUpdateEvent(faceChangedEvent);
+            //var faceChangedEvent = _mapper.Map<ShowDisplayEvent>(entity);
+            //AddOrUpdateEvent(faceChangedEvent);
 
-            return new Message
-            {
-                Body = faceChangedByteArray,
-                MessageId = faceChangedEvent.EventId.ToString(),
-                Label = faceChanged.Face.UserId.ToString()
-            };
+            return new Message();
+            //{
+            //    Body = faceChangedByteArray,
+            //    MessageId = faceChangedEvent.EventId.ToString(),
+            //    Label = faceChanged.Face.UserId.ToString()
+            //};
         }
 
-        public async void SendMessagesAsync()
+        public async void SendMessagesAsync(Topics topic)
         {
-            if (_lastTask != null && !_lastTask.IsCompleted)
-                return;
+            try
+            {
+                if (_lastTask != null && !_lastTask.IsCompleted)
+                    return;
 
-            var config = _configuration.GetSection("serviceBus").Get<ServiceBusConfiguration>();
-            var topicClient = new TopicClient(config.ConnectionString, Topic);
+                var config = _configuration.GetSection("serviceBus").Get<ServiceBusConfiguration>();
+                var topicClient = new TopicClient(config.ConnectionString, topic.ToString());
 
-            _logService.SendMessagesAsync("Face was changed");
+                _logService.SendMessagesAsync("Face was changed");
 
-            _lastTask = SendAsync(topicClient, _cancelMessages.Token);
+                _lastTask = SendAsync(topicClient, _cancelMessages.Token);
 
-            await _lastTask;
+                await _lastTask;
 
-            var closeTask = topicClient.CloseAsync();
-            await closeTask;
-            HandleException(closeTask);
+                var closeTask = topicClient.CloseAsync();
+                await closeTask;
+                HandleException(closeTask);
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         public async Task SendAsync(TopicClient topicClient,
@@ -145,7 +181,7 @@ namespace GeekBurger.UI.Service
                 else
                 {
                     if (message == null) continue;
-                    AddOrUpdateEvent(new FaceChangedEvent() { EventId = new Guid(message.MessageId) });
+                    ///AddOrUpdateEvent(new ShowDisplayEvent() { EventId = new Guid(message.MessageId) });
                     _messages.Remove(message);
                 }
             }
@@ -168,7 +204,7 @@ namespace GeekBurger.UI.Service
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            EnsureTopicIsCreated();
+            //EnsureTopicIsCreated();
 
             return Task.CompletedTask;
         }
@@ -179,5 +215,7 @@ namespace GeekBurger.UI.Service
 
             return Task.CompletedTask;
         }
+
+
     }
 }

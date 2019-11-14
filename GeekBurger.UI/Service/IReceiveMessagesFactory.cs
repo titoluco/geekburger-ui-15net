@@ -2,8 +2,9 @@
 
 namespace GeekBurger.UI.Service
 {
-    public interface IReceiveMessagesFactory
+    public interface IReadStoreCatalog
     {
-        ReceiveMessagesService CreateNew(string topic, string subscription, string filterName = null, string filter = null);
+        void CatalogVerify();
+        //ShowDisplayService publicar();
     }
 }
