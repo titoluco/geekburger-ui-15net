@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Registry;
 
-namespace GeekBurger.UI.Controllers
+namespace GeekBurger.UI.Polly
 {
     public static class PolyRegistryExtensions
     {

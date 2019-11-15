@@ -1,4 +1,4 @@
-﻿namespace GeekBurger.UI.Controllers
+﻿namespace GeekBurger.UI.Polly
 {
     public static class PolicyContextItems
     {

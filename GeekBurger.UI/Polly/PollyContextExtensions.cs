@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Polly;
 
-namespace GeekBurger.UI.Controllers
+namespace GeekBurger.UI.Polly
 {
     public static class PollyContextExtensions
     {

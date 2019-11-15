@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using GeekBurger.UI.Contract;
 using GeekBurger.UI.Model;
-using GeekBurger.UI.Repository;
 using Microsoft.Azure.Management.ServiceBus.Fluent;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.EntityFrameworkCore;

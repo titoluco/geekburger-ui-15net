@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using GeekBurger.UI.Contract;
 using GeekBurger.UI.Model;
-using GeekBurger.UI.Repository;
 using Microsoft.Azure.Management.ServiceBus.Fluent;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.EntityFrameworkCore;
@@ -44,31 +43,6 @@ namespace GeekBurger.UI.Service
             _serviceProvider = serviceProvider;
         }
 
-        //public void EnsureTopicIsCreated()
-        //{
-
-        //    if (!_namespace.Topics.List()
-        //        .Any(topic => topic.Name
-        //            .Equals(Topics.uicommand.ToString(), StringComparison.InvariantCultureIgnoreCase)))
-        //        _namespace.Topics.Define(Topics.uicommand.ToString())
-        //            .WithSizeInMB(1024).Create();
-
-        //    if (!_namespace.Topics.List()
-        //        .Any(topic => topic.Name
-        //            .Equals(Topics.neworder.ToString(), StringComparison.InvariantCultureIgnoreCase)))
-        //        _namespace.Topics.Define(Topics.neworder.ToString())
-        //            .WithSizeInMB(1024).Create();
-
-        //}
-
-        public void AddToMessageList(IEnumerable<EntityEntry<FaceModel>> changes)
-        {
-            _messages.AddRange(changes
-            .Where(entity => entity.State != EntityState.Detached
-                    && entity.State != EntityState.Unchanged)
-            .Select(GetMessage).ToList());
-        }
-
 
         public void AddMessage(ShowDisplayMessage showDisplayMessage)
         {
@@ -85,45 +59,6 @@ namespace GeekBurger.UI.Service
             }
 
             _messages.Add(showDisplayMessage.AsMessage());
-        }
-
-        private void AddOrUpdateEvent(ShowDisplayEvent faceChangedEvent)
-        {
-            using (var scope = _serviceProvider.CreateScope())
-            {
-                var scopedProcessingService =
-                    scope.ServiceProvider
-                        .GetRequiredService<IFaceChangedEventRepository>();
-
-                ShowDisplayEvent evt;
-                if (faceChangedEvent.EventId == Guid.Empty
-                    || (evt = scopedProcessingService.Get(faceChangedEvent.EventId)) == null)
-                    scopedProcessingService.Add(faceChangedEvent);
-                else
-                {
-                    evt.MessageSent = true;
-                    scopedProcessingService.Update(evt);
-                }
-
-                scopedProcessingService.Save();
-            }
-        }
-
-        public Message GetMessage(EntityEntry<FaceModel> entity)
-        {
-            //var faceChanged = _mapper.Map<FaceChangedMessage>(entity);
-            //var faceChangedSerialized = JsonConvert.SerializeObject(faceChanged);
-            //var faceChangedByteArray = Encoding.UTF8.GetBytes(faceChangedSerialized);
-
-            //var faceChangedEvent = _mapper.Map<ShowDisplayEvent>(entity);
-            //AddOrUpdateEvent(faceChangedEvent);
-
-            return new Message();
-            //{
-            //    Body = faceChangedByteArray,
-            //    MessageId = faceChangedEvent.EventId.ToString(),
-            //    Label = faceChanged.Face.UserId.ToString()
-            //};
         }
 
         public async void SendMessagesAsync(Topics topic)

@@ -14,6 +14,7 @@ using GeekBurger.UI.Model;
 using Newtonsoft.Json;
 using GeekBurger.UI.Contract;
 using GeekBurger.UI.Helper;
+using StoreCatalog.Contract;
 
 namespace GeekBurger.UI.Service
 {
@@ -27,6 +28,7 @@ namespace GeekBurger.UI.Service
         private readonly ILogger<ReceiveMessagesService> _logger;
         private readonly ILogService _logService;
         private readonly IShowDisplayService _showDisplayService;
+        private readonly IMetodosApi _metodosApi;
 
         private CancellationTokenSource _cancelMessages;
 
@@ -35,13 +37,14 @@ namespace GeekBurger.UI.Service
         private readonly List<Message> _messages;
         */
 
-        public ReceiveMessagesService(IHubContext<MessageHub> hubContext, ILogger<ReceiveMessagesService> logger, IShowDisplayService showDisplayService, ILogService logService,
+        public ReceiveMessagesService(IHubContext<MessageHub> hubContext, ILogger<ReceiveMessagesService> logger, IShowDisplayService showDisplayService, ILogService logService, IMetodosApi metodosApi,
             string topic, string subscription, string filterName = null, string filter = null)
         {
             _logger = logger;//TODO ver se faz sentido remover este log
             _logService = logService; //log no servicebus
             _hubContext = hubContext;
             _showDisplayService = showDisplayService;
+            _metodosApi = metodosApi;
 
             IConfiguration configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -170,9 +173,9 @@ namespace GeekBurger.UI.Service
                              "Restrictions": ["soy","diary","peanut"] }
 
                      * */
-                    //ProductsListMessage productsListMessage = MetodosApi.retornoGet<ProductsListMessage>("http://localhost:50135/Mock/api/products");
+                    //ProductsListMessage productsListMessage = _metodosApi.retornoGet<ProductsListMessage>("http://localhost:50135/Mock/api/products");
 
-                    IList<string> restrictionList = MetodosApi.retornoGet<List<string>>($"https://geekburgeruser.azurewebsites.net/api/FoodRestriction/{userRetrievedMessage.UserId}/GetFoodRestrictionsByUserId");
+                    IList<string> restrictionList = _metodosApi.retornoGet<List<string>>($"https://geekburgeruser.azurewebsites.net/api/FoodRestriction/{userRetrievedMessage.UserId}/GetFoodRestrictionsByUserId");
 
                     var storename = "Los Angeles - Pasadena";
                     string url = $"http://geekburgerstorecatalog.azurewebsites.net/api/products?StoreName={storename}&UserId={userRetrievedMessage.UserId}&Restrictions={restrictionList.Aggregate((i, j) => i + " =" + j)}";
@@ -185,7 +188,7 @@ namespace GeekBurger.UI.Service
 
                     };
 
-                    ProductsListMessage productsListMessage = MetodosApi.retornoGet<ProductsListMessage>(url);
+                    StoreCatalog.Contract.Responses.ProductResponse productsListMessage = _metodosApi.retornoGet<StoreCatalog.Contract.Responses.ProductResponse>(url);
 
                     showDisplayMessage.Label = "ShowProductsList";
                     showDisplayMessage.Body = productsListMessage;
