@@ -15,12 +15,13 @@ namespace GeekBurger.UI.Controllers
     [ApiController]
     public class FoodRestrictionsController : Controller
     {
-        FoodRestrictionsToGet foodRestrictions;
+        private FoodRestrictionsToGet foodRestrictions;
+        private IMetodosApi _metodosApi;
 
-        public FoodRestrictionsController()
+        public FoodRestrictionsController(IMetodosApi metodosApi)
         {
             foodRestrictions = new FoodRestrictionsToGet() { Processing = true, UserId = new Guid("2840b416-6bef-48fc-ac64-0db3df117955") }; //_mapper.Map<FaceToGet>(face);
-
+            _metodosApi = metodosApi;
         }
 
         //api/FoodRestrictions
@@ -28,8 +29,8 @@ namespace GeekBurger.UI.Controllers
         public async Task<IActionResult> PostFoodRestrictions([FromBody] FoodRestrictionsToUpsert foodRestrictionsAdd)
         {
 
-            //await MetodosApi.EnvioPost("http://localhost:50135/Mock/api/FoodRestrictions", JsonConvert.SerializeObject(foodRestrictionsAdd));
-            await MetodosApi.EnvioPost("http://geekburgeruser.azurewebsites.net/api/FoodRestrictions", JsonConvert.SerializeObject(foodRestrictionsAdd));
+            //await _metodosApi.EnvioPost("http://localhost:50135/Mock/api/FoodRestrictions", JsonConvert.SerializeObject(foodRestrictionsAdd));
+            await _metodosApi.EnvioPost("http://geekburgeruser.azurewebsites.net/api/FoodRestrictions", JsonConvert.SerializeObject(foodRestrictionsAdd));
 
             return CreatedAtRoute("FoodRestrictions",
                new { id = foodRestrictions.UserId },

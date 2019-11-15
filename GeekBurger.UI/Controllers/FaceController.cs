@@ -8,7 +8,6 @@ using GeekBurger.UI.Service;
 //using GeekBurger.UI.Mock;
 using helper = GeekBurger.UI.Helper;
 using GeekBurger.UI.Model;
-using GeekBurger.UI.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -19,28 +18,16 @@ namespace GeekBurger.UI.Controllers
     public class FaceController : Controller
     {
         private IMapper _mapper;
-        private IUserConnector _userConnector;
-        private IFaceRepository _faceRepository;
+        private IMetodosApi _metodosApi;
 
         FaceToGet faceToGet;
 
-        public FaceController(IUserConnector userConnector, IFaceRepository faceRepository, IMapper mapper)
+        public FaceController(IMetodosApi metodosApi, IMapper mapper)
         {
             faceToGet = new FaceToGet() { Processing = true, UserId = new Guid("2840b416-6bef-48fc-ac64-0db3df117955") }; //_mapper.Map<FaceToGet>(face);
-            _userConnector = userConnector;
-            _faceRepository = faceRepository;
             _mapper = mapper;
+            _metodosApi = metodosApi;
         }
-
-        //// POST api/face
-        //[HttpPost("teste2")]
-        //public async Task<IActionResult> PostFaceAsync()
-        //{
-
-        //    ProductsListMessage productsListMessage = MetodosApi.retornoGet<ProductsListMessage>("http://localhost:50135/Mock/api/products");
-
-        //    return Ok();
-        //}
 
         // POST api/face
         [HttpPost()]
@@ -48,9 +35,10 @@ namespace GeekBurger.UI.Controllers
         {
             //await _userConnector.GetUserFromFace(requestiD);
             //TODO call async post to api/user and return 
-            //await MetodosApi.EnvioPost("http://localhost:50135/Mock/api/user", JsonConvert.SerializeObject(face));
-
-            await MetodosApi.EnvioPost("http://geekburgeruser.azurewebsites.net/api/user", JsonConvert.SerializeObject(face));
+            
+           // await _metodosApi.PostToApi("http://localhost:50135/Mock/api/user", JsonConvert.SerializeObject(face));
+           
+            await _metodosApi.EnvioPost("http://geekburgeruser.azurewebsites.net/api/user", JsonConvert.SerializeObject(face));
         
             return Ok(new FoodRestrictionsResponse { RequesterId = face.RequesterId });
         }

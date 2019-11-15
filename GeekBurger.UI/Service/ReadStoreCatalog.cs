@@ -12,20 +12,21 @@ namespace GeekBurger.UI.Service
     {
 
         private readonly IShowDisplayService _showDisplayService;
+        private readonly IMetodosApi _metodosApi;
 
-
-        public ReadStoreCatalog(IShowDisplayService showDisplayService)
+        public ReadStoreCatalog(IShowDisplayService showDisplayService, IMetodosApi metodosApi)
         {
             _showDisplayService = showDisplayService;
+            _metodosApi = metodosApi;
             CatalogVerify();
         }
         public void CatalogVerify()
         {
 
-            //Ready ready = MetodosApi.retornoGet<Ready>("http://localhost:50135/Mock/api/store");
+            //Ready ready = _metodosApi.retornoGet<Ready>("http://localhost:50135/Mock/api/store");
 
 
-            Ready ready = MetodosApi.retornoGet<Ready>("http://geekburgerstorecatalog.azurewebsites.net/api/store");
+            Ready ready = _metodosApi.retornoGet<Ready>("http://geekburgerstorecatalog.azurewebsites.net/api/store");
 
 
             ShowDisplayMessage showDisplayMessage = new ShowDisplayMessage();
@@ -34,7 +35,7 @@ namespace GeekBurger.UI.Service
             showDisplayMessage.Properties.Add("ServicoEnvio", "GeekBurger.UI");
 
 
-            if ((bool)ready?.IsReady)
+            if (ready?.IsReady == true)
             {
                 showDisplayMessage.Label = "showwelcomepage";
                 showDisplayMessage.Body = "Exibir página de boas vindas";

@@ -14,12 +14,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using GeekBurger.UI.Helper;
 using Swashbuckle.AspNetCore.Swagger;
-using GeekBurger.UI.Extension;
 using Microsoft.EntityFrameworkCore;
 using GeekBurger.UI.Service;
-//using GeekBurger.UI.Mock;
-using GeekBurger.UI.Repository;
-//using Microsoft.AspNetCore.Hosting.Internal;
+using GeekBurger.UI.Polly;
 
 
 namespace GeekBurger.UI
@@ -58,35 +55,21 @@ namespace GeekBurger.UI
                 });
             });
 
-            services.AddSingleton<IUserConnector, UserConnector>();
-
+            
+            services.AddSingleton<IMetodosApi, MetodosApi>();
             services.AddSingleton<IServiceBusTopics, ServiceBusTopics>();
             services.AddSingleton<IReceiveMessagesFactory, ReceiveMessagesFactory>();
             services.AddSingleton<IReadStoreCatalog, ReadStoreCatalog>();
             services.AddAutoMapper();
             services.AddSignalR();
-            //services.AddPollyPolicies();
+            services.AddPollyPolicies();
 
-            services.AddDbContext<UIContext>
-           (o => o.UseInMemoryDatabase("geekburger-ui"));
-
-
-
-            //var databasePath = "%DATABASEPATH%";
-            //var connection = Configuration.GetConnectionString("sql")
-            //    .Replace(databasePath, HostingEnvironment.ContentRootPath);
-
-            //services.AddEntityFrameworkSqlite()
-            //    .AddDbContext<UIContext>(o => o.UseSqlite(connection));
-
-            //services.AddScoped<IFaceChangedEventRepository, FaceChangedEventRepository>();
-            services.AddScoped<IFaceRepository, FaceRepository>();
             services.AddSingleton<IShowDisplayService, ShowDisplayService>();
             services.AddSingleton<ILogService, LogService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, UIContext uIContext)
+        public void Configure(IApplicationBuilder app)
         {
 
             if (HostingEnvironment.IsDevelopment())
@@ -106,6 +89,8 @@ namespace GeekBurger.UI
             });
 
             app.UseHttpsRedirection();
+
+            app.UseStaticFiles();
             app.UseMvc();
 
             var option = new RewriteOptions();
