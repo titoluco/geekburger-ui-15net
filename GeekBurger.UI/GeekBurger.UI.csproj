@@ -38,7 +38,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GeekBurger.UI.Contract\GeekBurger.UI.Contract.csproj" />
-    <ProjectReference Include="..\GeekBurger.UI.Mock\GeekBurger.UI.Mock.csproj" />
   </ItemGroup>
 
 </Project>
