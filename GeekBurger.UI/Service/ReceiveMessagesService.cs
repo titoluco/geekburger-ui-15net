@@ -19,7 +19,7 @@ using StoreCatalog.Contract;
 namespace GeekBurger.UI.Service
 {
 
-    public class ReceiveMessagesService
+    public class ReceiveMessagesService : IReceiveMessagesService
     {
         private readonly string _topicName;
         private static ServiceBusConfiguration _serviceBusConfiguration;
@@ -94,7 +94,7 @@ namespace GeekBurger.UI.Service
 
         }
 
-        private Task HandleStoreCatalogReady(Message message, CancellationToken arg2)
+        public Task HandleStoreCatalogReady(Message message, CancellationToken arg2)
         {
             try
             {
@@ -123,7 +123,7 @@ namespace GeekBurger.UI.Service
             }
         }
 
-        private Task HandleUserRetrieved(Message message, CancellationToken arg2)
+        public Task HandleUserRetrieved(Message message, CancellationToken arg2)
         {
             try
             {

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using GeekBurger.UI.Service;
+using Microsoft.Azure.ServiceBus;
+using Moq;
 using NUnit.Framework;
 
 namespace GeekBurger.UI.Tests
@@ -38,4 +41,9 @@ namespace GeekBurger.UI.Tests
         public Guid StoreId { get; set; }
         public bool IsReady { get; set; }
     }
+
+
+
+ 
+
 }
